@@ -99,7 +99,12 @@ const MySelect = ({ label, ...props }) => {
 };
 
 
+
+
 const Estimate = () => {
+
+    
+
     return (
         <div className='mycontainer'>
         <h1>Request an Estimate</h1>
@@ -114,6 +119,17 @@ const Estimate = () => {
                 Address: '',
                 Notes: ''
             }}
+
+            onSubmit={async (values) => {
+                const response = await fetch('/estimate/send', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(values)
+                })
+            }}
+
             validationSchema={Yup.object({
                 firstName: Yup.string()
                     .max(15, 'Must be 15 characters or less')
@@ -136,12 +152,7 @@ const Estimate = () => {
                 
                 
             })}
-            onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
-                    setSubmitting(false);
-                }, 400);
-            }}
+            
         >
         <Form>
             <TextInput
