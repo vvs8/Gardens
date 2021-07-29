@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import { Formik, Form, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Label } from 'reactstrap';
 
 import '../App.css';
 import './css/Estimate.css';
 
+var phoneRegEx = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-
-const MyTextInput = ({ label, ...props }) => {
+const TextInput = ({ label, ...props }) => {
 // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
 // which we can spread on <input>. We can use field meta to show an error
 // message if the field is invalid and it has been touched (i.e. visited)
@@ -16,7 +16,7 @@ const MyTextInput = ({ label, ...props }) => {
     return (
         <row>
             <label htmlFor={props.id || props.name}>{label}</label>
-            <input className="text-input" {...field} {...props} />
+            <input className="text-input" required {...field} {...props} />
                 {meta.touched && meta.error ? (
                     <div className="error">{meta.error}</div>
                 ) : null}
@@ -24,6 +24,20 @@ const MyTextInput = ({ label, ...props }) => {
         </row>
     );
 };
+
+const TextInput2 = ({ label, ...props }) => {
+        const [field, meta] = useField(props);
+        return (
+            <row>
+                <label htmlFor={props.id || props.name}>{label}</label>
+                <input className="text-input" {...field} {...props} />
+                    {meta.touched && meta.error ? (
+                        <div className="error">{meta.error}</div>
+                    ) : null}
+                    
+            </row>
+        );
+    };
 
 const TextArea = ({ label, ...props }) => {
         const [field, meta] = useField(props);
@@ -37,6 +51,20 @@ const TextArea = ({ label, ...props }) => {
             </row>
         );
     };
+
+const PhoneInput = ({ label, ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+        <row>
+            <label htmlFor={props.id || props.name}>{label}</label>
+            <input type="tel" className="phone-input" required {...field} {...props} />
+                {meta.touched && meta.error ? (
+                    <div className="error">{meta.error}</div>
+                ) : null}
+                
+        </row>
+    );
+};
 
 const MyCheckbox = ({ children, ...props }) => {
 // React treats radios and checkbox inputs differently other input types, select, and textarea.
@@ -80,8 +108,11 @@ const Estimate = () => {
                 firstName: '',
                 lastName: '',
                 email: '',
-                acceptedTerms: false, // added for our checkbox
-                jobType: '', // added for our select
+                tel: '',
+                checked: [], 
+                City: '', 
+                Address: '',
+                Notes: ''
             }}
             validationSchema={Yup.object({
                 firstName: Yup.string()
@@ -93,15 +124,17 @@ const Estimate = () => {
                 email: Yup.string()
                     .email('Invalid email address')
                     .required('Required'),
-                acceptedTerms: Yup.boolean()
-                    .required('Required')
-                    .oneOf([true], 'You must accept the terms and conditions.'),
-                jobType: Yup.string()
+                tel: Yup.string()
+                    .matches(phoneRegEx, 'Invalid phone number')
+                    .required('Required'),
+                City: Yup.string()
                     .oneOf(
-                        ['designer', 'development', 'product', 'other'],
-                        'Invalid Job Type'
+                        ['Vancouver', 'Burnaby', 'Coquitlam', 'New Westminster', 'North Vancouver', 'West Vancouver', 'Richmond'],
+                        'Invalid City'
                     )
                     .required('Required'),
+                
+                
             })}
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
@@ -111,50 +144,96 @@ const Estimate = () => {
             }}
         >
         <Form>
-            <MyTextInput
-                label="First Name"
+            <TextInput
+                label="First Name:"
                 name="firstName"
                 type="text"
                 placeholder="First"
             />
 
-            <MyTextInput
-                label="Last Name"
+            <TextInput
+                label="Last Name:"
                 name="lastName"
                 type="text"
                 placeholder="Last"
             />
 
-            <MyTextInput
-                label="Email Address"
+            <TextInput
+                label="Email Address:"
                 name="email"
                 type="email"
                 placeholder="Email"
             />
 
-            <MySelect label="" name="jobType">
-                <option value="">Select a job type</option>
-                <option value="designer">Residential</option>
-                <option value="development">Commercial</option>
-                
+            <PhoneInput
+                label="Phone Number:"
+                name="tel"
+                type="tel"
+                placeholder="Tel."
+            />
+
+            <MySelect label="Сity:" name="City">
+                <option value="">Select your city</option>
+                <option value="Vancouver">Vancouver</option>
+                <option value="Burnaby">Burnaby</option>
+                <option value="Coquitlam">Coquitlam</option>
+                <option value="New Westminster">New Westminster</option>
+                <option value="North Vancouver">North Vancouver</option>
+                <option value="West Vancouver">West Vancouver</option>
+                <option value="Richmond">Richmond</option>
             </MySelect>
 
+            <TextInput2
+                label="Address:"
+                name="Address"
+                type="text"
+                placeholder="Address"
+            />
+
+            <div>
+            <label>Services:</label>
             <Row>
-                <Col >
-                <MyCheckbox name="acceptedTerms">
-                    I accept the terms and conditions
-                </MyCheckbox>
+                <Col>
+                    <MyCheckbox name="checked" value="Lawn Services">
+                        Lawn Services
+                    </MyCheckbox>
                 </Col>
-                 <Col >
-                <MyCheckbox name="acceptedTerms">
-                    I accept the terms and conditions
-                </MyCheckbox>
+                <Col>
+                    <MyCheckbox name="checked" value="Garden Cleanup">
+                        Garden Cleanup
+                    </MyCheckbox>
                  </Col>
-             </Row>
+            </Row>
+            <Row>
+                <Col>
+                    <MyCheckbox name="checked" value="Sod">
+                        Sod Installation
+                    </MyCheckbox>
+                </Col>
+                <Col>
+                    <MyCheckbox name="checked" value="Maintenance">
+                        Maintenance
+                    </MyCheckbox>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <MyCheckbox name="checked" value="Hedge Trimming">
+                        Hedge Trimming
+                    </MyCheckbox>
+                </Col>
+                <Col>
+                    <MyCheckbox name="checked" value="Other">
+                        Other
+                    </MyCheckbox>
+                </Col>
+            </Row>
+            </div>
+            
 
             <TextArea
-                label="Notes"
-                name="text"
+                label="Notes:"
+                name="Notes"
                 className="notes"
                 placeholder="Notes"
             />
