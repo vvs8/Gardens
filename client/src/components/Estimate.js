@@ -3,11 +3,12 @@ import { Formik, Form, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Row, Col, Label } from 'reactstrap';
 import {TextInput, TextInput2, PhoneInput, MySelect, MyCheckbox, TextArea, phoneRegEx} from './support/Forms';
-
+import UploadComponent from './support/ImageUpload';
 import '../App.css';
 import './css/Estimate.css';
 
 
+   
 
 const Estimate = () => {
     return (
@@ -24,6 +25,9 @@ const Estimate = () => {
                 Address: '',
                 Notes: ''
             }}
+
+            
+          
 
             onSubmit={async (values) => {
                 const response = await fetch('/estimate/send', {
@@ -145,17 +149,17 @@ const Estimate = () => {
                 </Col>
             </Row>
             </div>
-            <div className="form-group">
-                <input type="file" multiple/>
-            </div>
             
-
+           
+            
             <TextArea
                 label="Notes:"
                 name="Notes"
                 className="notes"
                 placeholder="Notes"
             />
+            
+            
              
             
             <div>
@@ -166,6 +170,8 @@ const Estimate = () => {
                 
         </Form>
     </Formik>
+    <UploadComponent/>
+    
     </div>
     );
 };
