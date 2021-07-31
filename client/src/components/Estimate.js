@@ -3,7 +3,8 @@ import { Formik, Form, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Row, Col, Label } from 'reactstrap';
 import {TextInput, TextInput2, PhoneInput, MySelect, MyCheckbox, TextArea, phoneRegEx} from './support/Forms';
-import UploadComponent from './support/ImageUpload';
+import Dropzone from './support/ImageUpload';
+import Upload from './support/Upload';
 import '../App.css';
 import './css/Estimate.css';
 
@@ -150,6 +151,9 @@ const Estimate = () => {
             </Row>
             </div>
             
+            <div>
+                <Dropzone />
+            </div>
            
             
             <TextArea
@@ -159,7 +163,7 @@ const Estimate = () => {
                 placeholder="Notes"
             />
             
-            
+            <Upload/>
              
             
             <div>
@@ -170,7 +174,8 @@ const Estimate = () => {
                 
         </Form>
     </Formik>
-    <UploadComponent/>
+    
+    
     
     </div>
     );
