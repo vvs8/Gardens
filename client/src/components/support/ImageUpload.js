@@ -4,12 +4,13 @@ import axios from 'axios';
 
 import './Dropzone.css';
 
-const Dropzone = forwardRef((props, ref) => {
+const UploadImages = ({parentCallback}) => {
     const fileInputRef = useRef();
     const modalImageRef = useRef();
     const modalRef = useRef();
     const progressRef = useRef();
     const uploadRef = useRef();
+
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [validFiles, setValidFiles] = useState([]);
     const [unsupportedFiles, setUnsupportedFiles] = useState([]);
@@ -24,8 +25,12 @@ const Dropzone = forwardRef((props, ref) => {
               return acc;
             }
         }, []);
-        setValidFiles([...filteredArr]);    
+        setValidFiles([...filteredArr]); 
+        parentCallback([...filteredArr])
+         
     }, [selectedFiles]);
+
+    
 
     const preventDefault = (e) => {
         e.preventDefault();
@@ -129,39 +134,21 @@ const Dropzone = forwardRef((props, ref) => {
         modalImageRef.current.style.backgroundImage = 'none';
     }
     
-    useImperativeHandle(ref, () => ({
-        uploadFiles() {
-            for (let i = 0; i < validFiles.length; i++) {
-                const formData = new FormData();
-                formData.append('image', validFiles[i]);
-                formData.append('key', '');
-                axios.post('endpoint/upload', formData, {
-
-                })
-                .catch(() => {
-                    uploadRef.current.innerHTML = `<span class="error">Error Uploading File(s)</span>`;
-                    progressRef.current.style.backgroundColor = 'red';
-                })
-            }
-        }
-    }),)
+    
+    
+    
 
     return (
         <>
+            <label>Upload Photos:</label>
             <div className="container">
                 {unsupportedFiles.length ? <p>Please remove all unsupported files.</p> : ''}
-                <label>Upload Images</label>
-                <Row className="drop-container"
+                <a className="buttoncustom tick"
                     onDragOver={dragOver}
                     onDragEnter={dragEnter}
                     onDragLeave={dragLeave}
                     onDrop={fileDrop}
-                    onClick={fileInputClicked}
-                >
-                    <div className="drop-message">
-                        <div className="upload-icon"></div>
-                        Drop or Select File(s) Here
-                    </div>
+                    onClick={fileInputClicked}>
                     <input
                         ref={fileInputRef}
                         className="file-input"
@@ -169,24 +156,24 @@ const Dropzone = forwardRef((props, ref) => {
                         multiple
                         onChange={filesSelected}
                     />
-                </Row>   
+                </a> 
             </div>
             <span className='file-error-message'>{errorMessage}</span>
-            
-            <Row className="file-display-container">
+            <div className="file-display-container">
                     {
                         
                         validFiles.map((data, i) => 
                             <div className="card" key={i}>
-                                <div className="file-remove" onClick={() => removeFile(data.name)}>X</div>
+                                <div className="file-remove" onClick={() => removeFile(data.name)}>x</div>
                                 <div onClick={!data.invalid ? () => openImageModal(data) : () => removeFile(data.name)}>
                                     <img className='ImagePrev' src={URL.createObjectURL(data)} />
                                 </div>
+                                <textarea className='card-text' placeholder="Notes"/>
                             </div>
                             
                         )
                     }
-            </Row>
+            </div>
 
             <div className="modal" ref={modalRef}>
                 <div className="overlay"></div>
@@ -196,6 +183,6 @@ const Dropzone = forwardRef((props, ref) => {
    
         </>           
     );
-})
+}
 
-export default Dropzone;
+export default UploadImages;

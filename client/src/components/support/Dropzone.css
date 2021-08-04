@@ -14,16 +14,37 @@
 
 .container {
     margin: auto;
-    padding: 10px;
-   
-   
+    padding: 10px; 
 }
 
-.ImagePrev {
-    width: 100px;
-    height: 100px;  
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    height: 250px;
+    width: 250px;
+    border-radius: 5px;
     margin: auto;
+    margin-bottom: 7px;
+    text-align: center;
+    font-family: arial;
 }
+
+.card-text {
+    height: 77px;
+    width: auto;
+    margin: 7px;
+    margin-bottom: 7px;
+}
+
+
+.ImagePrev {
+    border-radius: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 150px;
+    width: 150px;
+}
+    
+
 
 .container p {
     color: red;
@@ -83,8 +104,7 @@
 }
   
 .file-display-container {
-    width: 200px;
-    margin: 50px;
+    
 }
   
 .file-status-bar{
@@ -156,11 +176,12 @@
   
 .file-remove  {
     position: absolute;
-    top: 20px;
-    right: 2px;
-    line-height: 15px;
+    top: 10px;
+    right: 7px;
+    line-height: 10px;
+    font-size: 20px;
     cursor: pointer;
-    color: red;
+    color: rgb(82, 80, 80);
   
 }
 
@@ -270,10 +291,72 @@
     color: red;
 }
 
-.card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.buttoncustom{
+    background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+    background-image: linear-gradient(top, #f4f1ee, #fff);
+    border-radius: 50%;
+    box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+    float:left;
+    height: 70px;
+    margin: 0 30px 30px 0;
+    position: relative;
+    width: 70px;			
+    -webkit-transition: all .1s linear;
+    transition: all .1s linear;
+}
 
-    margin: auto;
-    text-align: center;
-    font-family: arial;
-  }
+.buttoncustom:after{
+    color:#e9e6e4;
+    content: "";
+    display: block;
+    font-size: 45px;
+    height: 30px;
+    text-decoration: none;
+    text-shadow: 0px -1px 1px #bdb5b4, 1px 1px 1px white;
+    position: absolute;
+    width: 30px;
+}
+
+
+
+
+
+
+
+.tick:after{
+    content: "+";
+    left:21px;
+    top:0px;
+}
+
+
+
+.buttoncustom:hover{
+    background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+    background-image: linear-gradient(top, #fff, #f4f1ee);
+    color:#0088cc;
+}
+
+
+
+
+
+.tick:hover:after{
+    color:#00dabd;
+    text-shadow:0px 0px 6px #83d244;
+}
+
+
+
+
+
+.buttoncustom:active{
+    background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+    background-image: linear-gradient(top, #efedec, #f7f4f4);
+    box-shadow: 0 3px 5px 0 rgba(0,0,0,.4), inset 0px -3px 1px 1px rgba(204,198,197,.5);
+}
+
+.buttoncustom:active:after{
+    color:#dbd2d2;
+    text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+}

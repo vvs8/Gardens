@@ -29,6 +29,7 @@ var upload = multer({
 
 router.post('/upload', upload.array('image', 8), (req, res, next) => {
     const reqFiles = [];
+    
 
     const url = req.protocol + '://' + req.get('host')
 

@@ -1,17 +1,38 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
+import { Link } from 'react-router-dom'
 import { Formik, Form, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Row, Col, Label } from 'reactstrap';
+import axios from 'axios';
+import { Row, Col, Label, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import {TextInput, TextInput2, PhoneInput, MySelect, MyCheckbox, TextArea, phoneRegEx} from './support/Forms';
-import Dropzone from './support/ImageUpload';
+import UploadImages from './support/ImageUpload';
 import '../App.css';
 import './css/Estimate.css';
 
+
 const Estimate = (props) => {
-    const imgRef = useRef();
+    const [validFiles, setValidFiles] = useState([]);
+    
+    function upload() {
+        for (let i = 0; i < validFiles.length; i++) {
+            const formData = new FormData();
+            formData.append('image', validFiles[i]);
+            formData.append('key', '');
+            axios.post('endpoint/upload', formData, {
+            })   
+        }
+    }
+    
 
     return (
+        <>
+        
         <div className='mycontainer'>
+        <Breadcrumb>
+            <BreadcrumbItem><Link to="/">Home</Link></BreadcrumbItem>
+            <BreadcrumbItem active>Quote</BreadcrumbItem>
+        </Breadcrumb>
+        
         <h1>Request an Estimate</h1>
         <Formik
             initialValues={{
@@ -27,7 +48,7 @@ const Estimate = (props) => {
 
             onSubmit={async (values) => {
                 
-                imgRef.current.uploadFiles()
+                
                 const response = await fetch('/estimate/send', {
                     method: 'POST',
                     headers: {
@@ -35,6 +56,8 @@ const Estimate = (props) => {
                     },
                     body: JSON.stringify(values)
                 })
+                upload() 
+
                 props.history.push("/");
                 
                 
@@ -62,6 +85,8 @@ const Estimate = (props) => {
             })}   
         >
 
+        
+            
         <Form>
             <TextInput
                 label="First Name:"
@@ -149,15 +174,17 @@ const Estimate = (props) => {
             </Row>
             </div>
             
-            <div>
-                <Dropzone ref={imgRef}/>
-            </div>
+            <Row>
+                <UploadImages parentCallback={setValidFiles}/>
+            </Row>
+                
+            
            
             <TextArea
-                label="Notes:"
+                label="Message:"
                 name="Notes"
                 className="notes"
-                placeholder="Notes"
+                placeholder="Message"
             />
             
             <div>
@@ -165,7 +192,12 @@ const Estimate = (props) => {
             </div>     
         </Form>
     </Formik>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
     </div>
+    </>
     );
 };
 

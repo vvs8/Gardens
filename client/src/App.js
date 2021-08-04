@@ -1,6 +1,5 @@
 import React, {Component, useState,useEffect} from 'react';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import Home from './components/Home';
 import Estimate from './components/Estimate';
 import ScrollToTop from './components/support/ScrollTop';
@@ -20,7 +19,6 @@ class App extends Component {
               <Route path='/' exact component={Home}  />
               <Route path='/estimate' exact component={Estimate}  />
             </Switch>
-            <Footer />
         </BrowserRouter>
         </>
     );
