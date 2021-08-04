@@ -1,17 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import { Formik, Form, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Row, Col, Label } from 'reactstrap';
 import {TextInput, TextInput2, PhoneInput, MySelect, MyCheckbox, TextArea, phoneRegEx} from './support/Forms';
 import Dropzone from './support/ImageUpload';
-import Upload from './support/Upload';
 import '../App.css';
 import './css/Estimate.css';
 
+const Estimate = (props) => {
+    const imgRef = useRef();
 
-   
-
-const Estimate = () => {
     return (
         <div className='mycontainer'>
         <h1>Request an Estimate</h1>
@@ -27,10 +25,9 @@ const Estimate = () => {
                 Notes: ''
             }}
 
-            
-          
-
             onSubmit={async (values) => {
+                
+                imgRef.current.uploadFiles()
                 const response = await fetch('/estimate/send', {
                     method: 'POST',
                     headers: {
@@ -38,6 +35,9 @@ const Estimate = () => {
                     },
                     body: JSON.stringify(values)
                 })
+                props.history.push("/");
+                
+                
             }}
 
             validationSchema={Yup.object({
@@ -58,12 +58,10 @@ const Estimate = () => {
                         ['Vancouver', 'Burnaby', 'Coquitlam', 'New Westminster', 'North Vancouver', 'West Vancouver', 'Richmond'],
                         'Invalid City'
                     )
-                    .required('Required'),
-                
-                
-            })}
-            
+                    .required('Required'),  
+            })}   
         >
+
         <Form>
             <TextInput
                 label="First Name:"
@@ -152,10 +150,9 @@ const Estimate = () => {
             </div>
             
             <div>
-                <Dropzone />
+                <Dropzone ref={imgRef}/>
             </div>
            
-            
             <TextArea
                 label="Notes:"
                 name="Notes"
@@ -163,20 +160,11 @@ const Estimate = () => {
                 placeholder="Notes"
             />
             
-            <Upload/>
-             
-            
             <div>
             <button className='button-sub' type="submit">Submit</button>
-            </div>
-            
-                
-                
+            </div>     
         </Form>
     </Formik>
-    
-    
-    
     </div>
     );
 };

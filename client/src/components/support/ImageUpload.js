@@ -1,21 +1,19 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Row, Col, Label } from 'reactstrap';
+import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { Row, Col, Label, Card } from 'reactstrap';
 import axios from 'axios';
 
 import './Dropzone.css';
 
-const Dropzone = () => {
+const Dropzone = forwardRef((props, ref) => {
     const fileInputRef = useRef();
     const modalImageRef = useRef();
     const modalRef = useRef();
     const progressRef = useRef();
     const uploadRef = useRef();
-    const uploadModalRef = useRef();
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [validFiles, setValidFiles] = useState([]);
     const [unsupportedFiles, setUnsupportedFiles] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
-    const [imageF, setImage] = useState([]);
 
     useEffect(() => {
         let filteredArr = selectedFiles.reduce((acc, current) => {
@@ -26,9 +24,7 @@ const Dropzone = () => {
               return acc;
             }
         }, []);
-
-        setValidFiles([...filteredArr]);
-        
+        setValidFiles([...filteredArr]);    
     }, [selectedFiles]);
 
     const preventDefault = (e) => {
@@ -59,7 +55,7 @@ const Dropzone = () => {
     const filesSelected = () => {
         if (fileInputRef.current.files.length) {
             handleFiles(fileInputRef.current.files);
-        }
+        }  
     }
 
     const fileInputClicked = () => {
@@ -67,21 +63,19 @@ const Dropzone = () => {
     }
 
     const handleFiles = (files) => {
+        setErrorMessage('');
         for(let i = 0; i < files.length; i++) {
             if (validateFile(files[i])) {
                 setSelectedFiles(prevArray => [...prevArray, files[i]]);
-                setImage(arr => [...arr, URL.createObjectURL(files[i])])
             } 
             else {
-                files[i]['invalid'] = true;
-                setSelectedFiles(prevArray => [...prevArray, files[i]]);
                 setErrorMessage('File type not permitted');
-                setUnsupportedFiles(prevArray => [...prevArray, files[i]]);
             }
-        }
-    }
 
-   
+            
+        }
+    
+    }
 
     const validateFile = (file) => {
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/heic'];
@@ -112,6 +106,7 @@ const Dropzone = () => {
         const index3 = unsupportedFiles.findIndex(e => e.name === name);
         validFiles.splice(index, 1);
         selectedFiles.splice(index2, 1);
+        fileInputRef.current.value = "";
         setValidFiles([...validFiles]);
         setSelectedFiles([...selectedFiles]);
         if (index3 !== -1) {
@@ -133,48 +128,29 @@ const Dropzone = () => {
         modalRef.current.style.display = "none";
         modalImageRef.current.style.backgroundImage = 'none';
     }
+    
+    useImperativeHandle(ref, () => ({
+        uploadFiles() {
+            for (let i = 0; i < validFiles.length; i++) {
+                const formData = new FormData();
+                formData.append('image', validFiles[i]);
+                formData.append('key', '');
+                axios.post('endpoint/upload', formData, {
 
-    const uploadFiles = async () => {
-        uploadModalRef.current.style.display = 'block';
-        uploadRef.current.innerHTML = 'File(s) Uploading...';
-        for (let i = 0; i < validFiles.length; i++) {
-            const formData = new FormData();
-            formData.append('image', validFiles[i]);
-            formData.append('key', '');
-
-            axios.post('endpoint/upload', formData, {
-                onUploadProgress: (progressEvent) => {
-                    const uploadPercentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
-                    progressRef.current.innerHTML = `${uploadPercentage}%`;
-                    progressRef.current.style.width = `${uploadPercentage}%`;
-
-                    if (uploadPercentage === 100) {
-                        uploadRef.current.innerHTML = 'File(s) Uploaded';
-                        validFiles.length = 0;
-                        setValidFiles([...validFiles]);
-                        setSelectedFiles([...validFiles]);
-                        setUnsupportedFiles([...validFiles]);
-                    }
-                },
-            })
-            .catch(() => {
-                uploadRef.current.innerHTML = `<span class="error">Error Uploading File(s)</span>`;
-                progressRef.current.style.backgroundColor = 'red';
-            })
+                })
+                .catch(() => {
+                    uploadRef.current.innerHTML = `<span class="error">Error Uploading File(s)</span>`;
+                    progressRef.current.style.backgroundColor = 'red';
+                })
+            }
         }
-    }
-
-    const closeUploadModal = () => {
-        uploadModalRef.current.style.display = 'none';
-    }
-
+    }),)
 
     return (
         <>
             <div className="container">
-                {unsupportedFiles.length === 0 && validFiles.length ? <button className="file-upload-btn" onClick={() => uploadFiles()}>Upload Files</button> : ''} 
                 {unsupportedFiles.length ? <p>Please remove all unsupported files.</p> : ''}
-                
+                <label>Upload Images</label>
                 <Row className="drop-container"
                     onDragOver={dragOver}
                     onDragEnter={dragEnter}
@@ -184,7 +160,7 @@ const Dropzone = () => {
                 >
                     <div className="drop-message">
                         <div className="upload-icon"></div>
-                        Drag & Drop files here or click to select file(s)
+                        Drop or Select File(s) Here
                     </div>
                     <input
                         ref={fileInputRef}
@@ -193,62 +169,33 @@ const Dropzone = () => {
                         multiple
                         onChange={filesSelected}
                     />
-                </Row>
-                
-                
-               
-                <Row className="file-display-container">
+                </Row>   
+            </div>
+            <span className='file-error-message'>{errorMessage}</span>
+            
+            <Row className="file-display-container">
                     {
+                        
                         validFiles.map((data, i) => 
-                            <div className="file-status-bar" key={i}>
-                                <div onClick={!data.invalid ? () => openImageModal(data) : () => removeFile(data.name)}>
-                                    <div className="file-type-logo"></div>
-                                    <div className="file-type">{fileType(data.name)}</div>
-                                    <span className={`file-name ${data.invalid ? 'file-error' : ''}`}>{data.name}</span>
-                                    <span className="file-size">({fileSize(data.size)})</span> {data.invalid && <span className='file-error-message'>({errorMessage})</span>}
-                                    <img className="ImagePrev" src={imageF}/>
-                                </div>
+                            <div className="card" key={i}>
                                 <div className="file-remove" onClick={() => removeFile(data.name)}>X</div>
+                                <div onClick={!data.invalid ? () => openImageModal(data) : () => removeFile(data.name)}>
+                                    <img className='ImagePrev' src={URL.createObjectURL(data)} />
+                                </div>
                             </div>
-                        )
-                    }
-                </Row>
-
-                <Row className="file-display-container">
-                    {
-                        imageF.map((data, i) => 
-                            <div key={i}>
-                                
-                                    <img className="ImagePrev" src={data}/>
-                            </div>
-                                
                             
                         )
                     }
-                </Row>
-                
-            
-                
-            </div>
+            </Row>
+
             <div className="modal" ref={modalRef}>
                 <div className="overlay"></div>
                 <span className="close" onClick={(() => closeModal())}>X</span>
                 <div className="modal-image" ref={modalImageRef}></div>
             </div>
-
-            <div className="upload-modal" ref={uploadModalRef}>
-                <div className="overlay"></div>
-                <div className="close" onClick={(() => closeUploadModal())}>X</div>
-                <div className="progress-container">
-                    <span ref={uploadRef}></span>
-                    <div className="progress">
-                        <div className="progress-bar" ref={progressRef}></div>
-                    </div>
-                </div>
-            </div>
-        </>
-                
+   
+        </>           
     );
-}
+})
 
 export default Dropzone;

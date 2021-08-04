@@ -1,7 +1,8 @@
 import React from 'react';
+import '../App.css';
 import './css/Cards.css';
 import CardItem from './Card';
-import '../App.css';
+
 
 function Cards() {
   return (

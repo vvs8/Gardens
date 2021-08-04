@@ -23,7 +23,7 @@
     color: #fff;
     padding: 8px 20px;
     border: 1px solid var(--primary);
-    transition: all 0.3s ease-out;
+    transition: all 0.1s ease-out;
     margin-right: 1rem;
   }
 
@@ -48,8 +48,8 @@
   
   .btn--large:hover,
   .btn--medium:hover {
-    transition: all 0.3s ease-out;
+    transition: all 0.1s ease-out;
     background: #fff;
     color: #242424;
-    transition: 250ms;
+  
   }

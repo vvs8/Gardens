@@ -3,27 +3,23 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import Estimate from './components/Estimate';
-import ScrollTop from './components/support/ScrollTop';
+import ScrollToTop from './components/support/ScrollTop';
 import UploadComponent from './components/support/ImageUpload';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.css';
 
 
 class App extends Component {
-  
-
    render() {
-    
     return (
         <>
         <BrowserRouter>
+        <ScrollToTop />
             <Navbar />
-            <ScrollTop>
             <Switch>
               <Route path='/' exact component={Home}  />
               <Route path='/estimate' exact component={Estimate}  />
             </Switch>
-            </ScrollTop>
             <Footer />
         </BrowserRouter>
         </>

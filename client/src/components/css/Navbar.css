@@ -1,3 +1,5 @@
+
+
 .mynavbar {
     background: #761e78;
     height: 80px;
@@ -21,7 +23,7 @@
 
   .mynavbar1 {
     background:#761e78;
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
     opacity: 0.7;
     height: 80px;
     display: flex;
@@ -37,7 +39,12 @@
 
   .mynavbar1:hover {
     opacity: 1;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
+  }
+
+  .mynavbar1:active {
+    opacity: 1;
+    transition: all 0.2s ease;
   }
   
   .navbar-container {
@@ -99,7 +106,7 @@
   
   .nav-links:hover {
     border-bottom: 8px solid #fff;
-    transition: all 0.2s ease-out;
+    transition: all 0.1s ease-out;
   }
   
   .nav-links-mobile {
@@ -118,22 +125,29 @@
     .nav-menu {
       display: flex;
       flex-direction: column;
+      
       width: 100%;
-      height: 90vh;
+      height: 120vh;
       position: absolute;
       top: 80px;
       
       left: -100%;
       opacity: 1;
-      transition: all 0.5s ease;
+      transition: all 0.2s ease;
     }
   
     .nav-menu.active {
-      background: #242222f3;
+      background: #242222;
       left: 0;
+      right: 0;
       opacity: 1;
       transition: all 0.5s ease;
       z-index: 1;
+
+    }
+
+    .mynavbar1 {
+      opacity: 1;
     }
   
     .nav-links {
@@ -154,9 +168,17 @@
   
     .navbar-logo {
       position: absolute;
-      top: 0;
+      font-size: 1.2rem;
       left: 0;
-      transform: translate(10%, 40%);
+      
+      
+      
+    }
+
+    .fa-typo3 {
+     
+      font-size: 1.2rem;
+    
     }
   
     .menu-icon {
@@ -176,7 +198,7 @@
       text-align: center;
       margin: 2rem auto;
       border-radius: 4px;
-      width: 80%;
+      width: 70%;
       text-decoration: none;
       font-size: 1.5rem;
       background-color: transparent;

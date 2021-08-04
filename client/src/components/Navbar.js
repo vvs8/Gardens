@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { ImCross } from 'react-icons/im';
 import {AiOutlineMenu } from 'react-icons/ai'
 import {GiLotus} from 'react-icons/gi'
-
+import '../App.css';
 
 import './css/Navbar.css'
 
@@ -57,7 +57,7 @@ function Navbar() {
         
         <>
             <nav className={header}>
-                <div className="navbar-container">
+                <div className="navbar-container" >
                     <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
                     <GiLotus className='fa-typo3' />
                         Reneissance Gardens   
