@@ -12,7 +12,8 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' +file.originalname)
-  }
+  },
+  
 })
 
 var upload = multer({
@@ -29,20 +30,19 @@ var upload = multer({
 
 router.post('/upload', upload.array('image', 8), (req, res, next) => {
     const reqFiles = [];
-    
-
     const url = req.protocol + '://' + req.get('host')
 
     for (var i = 0; i < req.files.length; i++) {
         reqFiles.push(url + '/public/' + req.files[i].filename)
     }
-
-    const user = new File({
+    
+    const Card = new File({
         _id: new mongoose.Types.ObjectId(),
-        imagesArray: reqFiles
+        imagesArray: reqFiles,
+        notes: req.body.notes
     });
 
-    user.save().then(result => {
+    Card.save().then(result => {
         res.status(201).json({
             message: "Uploaded!",
             userCreated: {

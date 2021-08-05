@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { Row, Col, Label, Card } from 'reactstrap';
-import axios from 'axios';
+import React, { useRef, useState, useEffect} from 'react';
+
 
 import './Dropzone.css';
 
@@ -8,12 +7,9 @@ const UploadImages = ({parentCallback}) => {
     const fileInputRef = useRef();
     const modalImageRef = useRef();
     const modalRef = useRef();
-    const progressRef = useRef();
-    const uploadRef = useRef();
-
+    
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [validFiles, setValidFiles] = useState([]);
-    const [unsupportedFiles, setUnsupportedFiles] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
@@ -26,15 +22,11 @@ const UploadImages = ({parentCallback}) => {
             }
         }, []);
         setValidFiles([...filteredArr]); 
-        parentCallback([...filteredArr])
-         
+        parentCallback([...filteredArr]) 
     }, [selectedFiles]);
-
-    
 
     const preventDefault = (e) => {
         e.preventDefault();
-        // e.stopPropagation();
     }
 
     const dragOver = (e) => {
@@ -63,6 +55,15 @@ const UploadImages = ({parentCallback}) => {
         }  
     }
 
+    const textSelected = (val, name) => {
+        const index = validFiles.findIndex(e => e.name === name);
+      
+        let copy = [...validFiles]
+        copy[index]['notes'] = (val) 
+        setValidFiles(copy);
+        console.log(validFiles[index])   
+    }
+
     const fileInputClicked = () => {
         fileInputRef.current.click();
     }
@@ -75,11 +76,8 @@ const UploadImages = ({parentCallback}) => {
             } 
             else {
                 setErrorMessage('File type not permitted');
-            }
-
-            
+            }   
         }
-    
     }
 
     const validateFile = (file) => {
@@ -87,7 +85,6 @@ const UploadImages = ({parentCallback}) => {
         if (validTypes.indexOf(file.type) === -1) {
             return false;
         }
-
         return true;
     }
 
@@ -108,16 +105,11 @@ const UploadImages = ({parentCallback}) => {
     const removeFile = (name) => {
         const index = validFiles.findIndex(e => e.name === name);
         const index2 = selectedFiles.findIndex(e => e.name === name);
-        const index3 = unsupportedFiles.findIndex(e => e.name === name);
-        validFiles.splice(index, 1);
+        validFiles.splice(index, 2);
         selectedFiles.splice(index2, 1);
         fileInputRef.current.value = "";
         setValidFiles([...validFiles]);
         setSelectedFiles([...selectedFiles]);
-        if (index3 !== -1) {
-            unsupportedFiles.splice(index3, 1);
-            setUnsupportedFiles([...unsupportedFiles]);
-        }
     }
 
     const openImageModal = (file) => {
@@ -133,16 +125,13 @@ const UploadImages = ({parentCallback}) => {
         modalRef.current.style.display = "none";
         modalImageRef.current.style.backgroundImage = 'none';
     }
-    
-    
-    
-    
 
+    
+    
     return (
         <>
-            <label>Upload Photos:</label>
+            <label className="label-upload">Upload Photos:</label>
             <div className="container">
-                {unsupportedFiles.length ? <p>Please remove all unsupported files.</p> : ''}
                 <a className="buttoncustom tick"
                     onDragOver={dragOver}
                     onDragEnter={dragEnter}
@@ -161,26 +150,22 @@ const UploadImages = ({parentCallback}) => {
             <span className='file-error-message'>{errorMessage}</span>
             <div className="file-display-container">
                     {
-                        
                         validFiles.map((data, i) => 
                             <div className="card" key={i}>
                                 <div className="file-remove" onClick={() => removeFile(data.name)}>x</div>
-                                <div onClick={!data.invalid ? () => openImageModal(data) : () => removeFile(data.name)}>
-                                    <img className='ImagePrev' src={URL.createObjectURL(data)} />
+                                <div>
+                                    <img className='ImagePrev' src={URL.createObjectURL(data)} onClick={!data.invalid ? () => openImageModal(data) : () => removeFile(data.name)}/>
                                 </div>
-                                <textarea className='card-text' placeholder="Notes"/>
+                                <textarea key={i} value={data.notes} onChange={(e) => textSelected(e.target.value, data.name) } className='card-text' placeholder="Notes"/>
                             </div>
-                            
                         )
-                    }
+                    }      
             </div>
-
             <div className="modal" ref={modalRef}>
                 <div className="overlay"></div>
                 <span className="close" onClick={(() => closeModal())}>X</span>
                 <div className="modal-image" ref={modalImageRef}></div>
             </div>
-   
         </>           
     );
 }

@@ -13,26 +13,24 @@ import './css/Estimate.css';
 const Estimate = (props) => {
     const [validFiles, setValidFiles] = useState([]);
     
+
     function upload() {
+        const formData = new FormData();
         for (let i = 0; i < validFiles.length; i++) {
-            const formData = new FormData();
             formData.append('image', validFiles[i]);
-            formData.append('key', '');
-            axios.post('endpoint/upload', formData, {
-            })   
+            formData.append('notes', (validFiles[i]).notes)
         }
+        axios.post('endpoint/upload', formData, {
+        }) 
     }
     
-
     return (
         <>
-        
         <div className='mycontainer'>
         <Breadcrumb>
             <BreadcrumbItem><Link to="/">Home</Link></BreadcrumbItem>
             <BreadcrumbItem active>Quote</BreadcrumbItem>
         </Breadcrumb>
-        
         <h1>Request an Estimate</h1>
         <Formik
             initialValues={{
@@ -47,8 +45,6 @@ const Estimate = (props) => {
             }}
 
             onSubmit={async (values) => {
-                
-                
                 const response = await fetch('/estimate/send', {
                     method: 'POST',
                     headers: {
@@ -57,10 +53,7 @@ const Estimate = (props) => {
                     body: JSON.stringify(values)
                 })
                 upload() 
-
                 props.history.push("/");
-                
-                
             }}
 
             validationSchema={Yup.object({
@@ -84,9 +77,7 @@ const Estimate = (props) => {
                     .required('Required'),  
             })}   
         >
-
-        
-            
+  
         <Form>
             <TextInput
                 label="First Name:"
@@ -188,7 +179,9 @@ const Estimate = (props) => {
             />
             
             <div>
-            <button className='button-sub' type="submit">Submit</button>
+            
+            <button className='buttoncustom2 tick2' type="submit"> </button>
+            
             </div>     
         </Form>
     </Formik>

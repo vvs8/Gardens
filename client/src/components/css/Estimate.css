@@ -86,6 +86,59 @@ input[type=text], select, textarea {
     display: table;
     clear: both;
   }
+
+  .buttoncustom2{
+    background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+    background-color: linear-gradient(top, #f4f1ee, #fff);
+    border-radius: 7px;
+    box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+    float:right;
+    height: 50px;
+    margin: 20px 20px 40px 40px;
+    position: relative;
+    width: 100px;			
+    -webkit-transition: all .1s linear;
+    transition: all .1s linear;
+}
+
+.buttoncustom2:after{
+    color:#808183;
+    content: "";
+    display: block;
+    font-size: 20px;
+    height: 30px;
+    text-decoration: none;
+    text-shadow: 0px -1px 1px #fff7f6, 1px 1px 1px white;
+    position: absolute;
+    width: 60px;
+}
+
+.tick2:after{
+    content: "Submit";
+    left:18px;
+    top:9px;
+}
+
+.buttoncustom2:hover{
+    background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+    background-image: linear-gradient(top, #fff, #f4f1ee);
+}
+
+.tick2:hover:after{
+    color:#00dabd;
+    text-shadow:0px 0px 6px #73ff00;
+}
+
+.buttoncustom2:active{
+    background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+    background-image: linear-gradient(top, #efedec, #f7f4f4);
+    box-shadow: 0 3px 5px 0 rgba(0,0,0,.4), inset 0px -3px 1px 1px rgba(204,198,197,.5);
+}
+
+.buttoncustom2:active:after{
+    color:#dbd2d2;
+    text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+}
   
   /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 960px) {

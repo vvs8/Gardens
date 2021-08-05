@@ -5,6 +5,9 @@ const fileSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     imagesArray: {
         type: Array
+    },
+    notes:{
+        type: [String]
     }
 }, {
     collection: 'files'
