@@ -1,60 +1,67 @@
-var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
+const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cors = require("cors");
+const expressValidator = require('express-validator');
+let uuidv1 = require('uuidv1')
+ 
+console.log(uuidv1())
 
 
-var config = require('./config');
+require("dotenv").config();
+
+
+
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const categoryRoutes = require('./routes/category');
+const productRoutes = require('./routes/product');
+//const braintreeRoutes = require('./routes/braintree');
+const orderRoutes = require('./routes/order');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var estimateRouter = require("./routes/estimate");
 const uploadRouter = require('./routes/file.route')
 
 
 
-const mongoose = require('mongoose');
-const url = config.mongoUrl;
-const connect = mongoose.connect(url);
-connect.then((db) => {
-    console.log("Connected correctly to server");
-}, (err) => { console.log(err); });
-
 var app = express();
-app.use(cors());
 
+// db
+mongoose
+    .connect(process.env.DATABASE, {
+        useNewUrlParser: true,
+        useCreateIndex: true
+    })
+    .then(() => console.log('DB Connected'));
+
+app.use(cors());
+app.use(expressValidator());
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(cookieParser());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static('uploads'));
+
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/estimate', estimateRouter);
 app.use('/endpoint', uploadRouter)
+app.use('/api', authRoutes);
+app.use('/api', userRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', productRoutes);
+//app.use('/api', braintreeRoutes);
+app.use('/api', orderRoutes);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;

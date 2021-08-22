@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect} from 'react';
-
-
 import './Dropzone.css';
+
 
 const UploadImages = ({parentCallback}) => {
     const fileInputRef = useRef();
@@ -17,7 +16,8 @@ const UploadImages = ({parentCallback}) => {
             const x = acc.find(item => item.name === current.name);
             if (!x) {
               return acc.concat([current]);
-            } else {
+            } 
+            else {
               return acc;
             }
         }, []);
@@ -57,7 +57,7 @@ const UploadImages = ({parentCallback}) => {
 
     const textSelected = (val, name) => {
         const index = validFiles.findIndex(e => e.name === name);
-      
+
         let copy = [...validFiles]
         copy[index]['notes'] = (val) 
         setValidFiles(copy);
@@ -126,8 +126,6 @@ const UploadImages = ({parentCallback}) => {
         modalImageRef.current.style.backgroundImage = 'none';
     }
 
-    
-    
     return (
         <>
             <label className="label-upload">Upload Photos:</label>

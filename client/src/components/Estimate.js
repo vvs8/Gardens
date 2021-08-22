@@ -13,7 +13,6 @@ import './css/Estimate.css';
 const Estimate = (props) => {
     const [validFiles, setValidFiles] = useState([]);
     
-
     function upload() {
         const formData = new FormData();
         for (let i = 0; i < validFiles.length; i++) {
@@ -34,8 +33,7 @@ const Estimate = (props) => {
         <h1>Request an Estimate</h1>
         <Formik
             initialValues={{
-                firstName: '',
-                lastName: '',
+                Name: '',
                 email: '',
                 tel: '',
                 checked: [], 
@@ -57,17 +55,14 @@ const Estimate = (props) => {
             }}
 
             validationSchema={Yup.object({
-                firstName: Yup.string()
-                    .max(15, 'Must be 15 characters or less')
-                    .required('Required'),
-                lastName: Yup.string()
-                    .max(20, 'Must be 20 characters or less')
-                    .required('Required'),
-                email: Yup.string()
-                    .email('Invalid email address')
+                Name: Yup.string()
+                    .max(50, 'Must be 50 characters or less')
                     .required('Required'),
                 tel: Yup.string()
                     .matches(phoneRegEx, 'Invalid phone number')
+                    .required('Required'),
+                email: Yup.string()
+                    .email('Invalid email address')
                     .required('Required'),
                 City: Yup.string()
                     .oneOf(
@@ -80,33 +75,23 @@ const Estimate = (props) => {
   
         <Form>
             <TextInput
-                label="First Name:"
-                name="firstName"
+                label="Name:"
+                name="Name"
                 type="text"
-                placeholder="First"
+                placeholder="Name"
             />
-
-            <TextInput
-                label="Last Name:"
-                name="lastName"
-                type="text"
-                placeholder="Last"
-            />
-
             <TextInput
                 label="Email Address:"
                 name="email"
                 type="email"
                 placeholder="Email"
             />
-
             <PhoneInput
                 label="Phone Number:"
                 name="tel"
                 type="tel"
                 placeholder="Tel."
             />
-
             <MySelect label="Сity:" name="City">
                 <option value="">Select your city</option>
                 <option value="Vancouver">Vancouver</option>
@@ -117,7 +102,6 @@ const Estimate = (props) => {
                 <option value="West Vancouver">West Vancouver</option>
                 <option value="Richmond">Richmond</option>
             </MySelect>
-
             <TextInput2
                 label="Address:"
                 name="Address"
@@ -139,38 +123,12 @@ const Estimate = (props) => {
                     </MyCheckbox>
                  </Col>
             </Row>
-            <Row>
-                <Col>
-                    <MyCheckbox name="checked" value="Sod">
-                        Sod Installation
-                    </MyCheckbox>
-                </Col>
-                <Col>
-                    <MyCheckbox name="checked" value="Maintenance">
-                        Maintenance
-                    </MyCheckbox>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <MyCheckbox name="checked" value="Hedge Trimming">
-                        Hedge Trimming
-                    </MyCheckbox>
-                </Col>
-                <Col>
-                    <MyCheckbox name="checked" value="Other">
-                        Other
-                    </MyCheckbox>
-                </Col>
-            </Row>
             </div>
             
             <Row>
                 <UploadImages parentCallback={setValidFiles}/>
             </Row>
                 
-            
-           
             <TextArea
                 label="Message:"
                 name="Notes"
@@ -179,9 +137,7 @@ const Estimate = (props) => {
             />
             
             <div>
-            
             <button className='buttoncustom2 tick2' type="submit"> </button>
-            
             </div>     
         </Form>
     </Formik>

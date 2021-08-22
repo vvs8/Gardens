@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import Button1 from './Button1'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { ImCross } from 'react-icons/im';
 import {AiOutlineMenu } from 'react-icons/ai'
 import {GiLotus} from 'react-icons/gi'
@@ -8,8 +8,15 @@ import '../App.css';
 
 import './css/Navbar.css'
 
+const isActive = (history, path) => {
+    if (history.location.pathname === path) {
+        return { color: "#ff9900" };
+    } else {
+        return { color: "#ffffff" };
+    }
+};
 
-function Navbar() {
+const Navbar = ({ history }) => {
     
     const [click, setClick] = useState(false)
     const [button, setButton] = useState(true)
@@ -67,35 +74,35 @@ function Navbar() {
                     </div>
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                         <li className='nav-item'>
-                            <Link to='/' className='nav-links' onClick={closeMobileMenu}>
+                            <Link to='/' className='nav-links' style={isActive(history, "/")} onClick={closeMobileMenu}>
                                 Home
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/services' className='nav-links' onClick={closeMobileMenu}>
+                            <Link to='/services' className='nav-links' style={isActive(history, "/services")} onClick={closeMobileMenu}>
                                 Services
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/articles' className='nav-links' onClick={closeMobileMenu}>
+                            <Link to='/articles' className='nav-links' style={isActive(history, "/articles")} onClick={closeMobileMenu}>
                                 Articles
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/login' className='nav-links' onClick={closeMobileMenu}>
-                                Login 
+                            <Link to='/signin' className='nav-links' style={isActive(history, "/signin")} onClick={closeMobileMenu}>
+                                Sign in 
                             </Link>
                         </li>
 
                         <li>
                             
-                            <Link to='/estimate' className='nav-links-mobile' onClick={closeMobileMenu}>
+                            <Link to='/estimate' className='nav-links-mobile' style={isActive(history, "/estimate")} onClick={closeMobileMenu}>
                                 ESTIMATE
                             </Link>
                         </li>
                     </ul>
                   
-                        {button && <Button1 buttonStyle ="btn--outline"> ESTIMATE</Button1>}
+                        {button && <Button1 buttonStyle ="btn--outline" > ESTIMATE </Button1>}
                 
                     
                 </div>
@@ -104,4 +111,4 @@ function Navbar() {
     )
 }
 
-export default Navbar
+export default withRouter(Navbar);
