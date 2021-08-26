@@ -1,3 +1,4 @@
+const path = require('path');
 var express = require('express');
 const mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
@@ -13,15 +14,16 @@ require("dotenv").config();
 
 
 
+
+//const braintreeRoutes = require('./routes/braintree');
+//const orderRoutes = require('./routes/order');
+var indexRouter = require('./routes/index');
+var estimateRouter = require("./routes/estimate");
+const uploadRouter = require('./routes/file.route')
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
-//const braintreeRoutes = require('./routes/braintree');
-const orderRoutes = require('./routes/order');
-var indexRouter = require('./routes/index');
-var estimateRouter = require("./routes/estimate");
-const uploadRouter = require('./routes/file.route')
 
 
 
@@ -31,7 +33,8 @@ var app = express();
 mongoose
     .connect(process.env.DATABASE, {
         useNewUrlParser: true,
-        useCreateIndex: true
+        useCreateIndex: true,
+        useUnifiedTopology: true
     })
     .then(() => console.log('DB Connected'));
 
@@ -57,7 +60,7 @@ app.use('/api', userRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', productRoutes);
 //app.use('/api', braintreeRoutes);
-app.use('/api', orderRoutes);
+//app.use('/api', orderRoutes);
 
 const port = process.env.PORT || 3001;
 
