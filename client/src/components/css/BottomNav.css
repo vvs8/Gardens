@@ -1,0 +1,75 @@
+.mmnavbar {
+    background: #f0ecf0;
+    width: 100%;
+    bottom: 0;
+    left:0;
+	  right:0;
+    border-top: 2px solid rgb(212, 212, 212);
+    position: fixed;
+    z-index: 1000;
+    
+   
+  } 
+  
+  .mmnavbar-container {
+    display:block;
+    height: 68px;
+  }
+  
+ 
+
+  .mmfa-typo4 {
+    font-size: 1.2rem;
+    cursor: pointer;
+   
+   
+  } 
+  .mmfa-typo5 {
+    
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: rgb(83, 83, 83);
+    display:flex;
+  } 
+
+  
+  
+  .mmnav-menu {
+    display:flex;
+    justify-content:center;
+   
+    
+   
+  }
+  
+  .mmnav-item {
+    display: block;
+    padding: 14px 16px;
+    text-align: center;
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+
+  .mmli{
+    list-style-type:none;
+  }
+  
+  .mmnav-links {
+    
+    color: rgb(71, 71, 71);
+    text-decoration: none;
+    display: inline-block;
+    height: 100%;
+    transition-duration: 0.2s;
+  }
+
+  .mmnav-links:hover {
+   
+    transition-duration: 0.2s;
+  }
+  
+ 
+  
+  
+
+ 

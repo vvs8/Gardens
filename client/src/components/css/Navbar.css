@@ -2,14 +2,14 @@
 
 .mynavbar {
     background: #761e78;
-    height: 80px;
+    height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
-    position: sticky;
+    position: fixed top;
     top: 0;
-    z-index: 999;
+    z-index: 1200;
     box-shadow: 0px 8px 8px -6px rgba(0,0,0,.5);
   }
 
@@ -44,14 +44,12 @@
     align-items: center;
     height: 80px;
     max-width: 1500px;
-  
   }
   
   
   .navbar-logo {
     color: #fff;
     justify-self: start;
-  
     cursor: pointer;
     text-decoration: none;
     font-size: 1.5rem;
@@ -157,50 +155,55 @@
   }
   .mnav-menu {
     display: none;
+  }
+
+  .MuiBottomNavigation-root {
+    
+    display: none;
     
   }
   
   @media screen and (max-width: 900px) {
-  
+    
+    .bottom-nav {
+      overflow: hidden;
+      display: contents;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      border-top: 1px solid rgb(196, 189, 189);
+      background-color: lightgrey;
+   
+    }
+
     .nav-menu {
       display: none;
-    }
-
-    .mnavbar-container {
-        
-      
-    }
-
-    
-
-    .mnav-menu {
-      display: flex;
-      flex-direction: column;
-      width: 90%;
-      height: 100%;
-      top: 80px;
-      right: 100%;
-      opacity: 1;
-      transition: all 1s ease;
-      list-style: none;
-      z-index: 2000;
-      position: fixed; 
-      
     }
 
     body.scrollblock {
       overflow: hidden;
     }
-  
-    .mnav-menu.active {
-      
-      background: rgba(21, 18, 22, 0.986);
-      z-index: 1000;
-      right: 0px;
-      opacity: 1;
-      transition: all 1s ease;
+
+    .mnav-menu {
+      display: flex;
+      justify-content: flex-end;
+      width: 77%;
+      height: 500px;
+      top: 69px;
+      left: -100%;
+      list-style: none;
+      position: fixed; 
+      overflow-y: scroll;
       z-index: 900;
-      
+      transition-duration: 5s;
+      transition-delay: 2s;
+      transition-delay: 5s;
+    }
+    
+    .mnav-menu.active {
+      z-index: 900;
+      background: rgb(24, 24, 24);
+      left: 0;
     } 
 
     .mynavbar1 {
@@ -215,13 +218,21 @@
       padding: 1rem ;
       margin-top: 15px;
       margin-right: 25px;
-     
     }
 
     .nav-links:hover {
       border-radius: 0;
       border-bottom: none;
     }
+
+   .hl {
+    display: block;
+    border-bottom: 3px solid rgba(77, 46, 85, 0.774);
+    box-shadow: rgb(255, 255, 255);
+    margin-top: 2px;
+   
+    width: 15rem;
+   }
   
     .navbar-logo {
       
@@ -240,7 +251,7 @@
       position: absolute;
       top: 0;
       right: 0;
-      transform: translate(-100%, 60%);
+      transform: translate(-100%, 30%);
       font-size: 1.8rem;
       cursor: pointer;
     }
@@ -265,4 +276,7 @@
       color: #242424;
       transition: 250ms;
     }
+    
+    
+
   }

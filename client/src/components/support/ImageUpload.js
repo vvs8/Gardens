@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect} from 'react';
+import { Button } from '@material-ui/core';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import './Dropzone.css';
 
 
@@ -57,7 +59,6 @@ const UploadImages = ({parentCallback}) => {
 
     const textSelected = (val, name) => {
         const index = validFiles.findIndex(e => e.name === name);
-
         let copy = [...validFiles]
         copy[index]['notes'] = (val) 
         setValidFiles(copy);
@@ -128,22 +129,27 @@ const UploadImages = ({parentCallback}) => {
 
     return (
         <>
-            <label className="label-upload">Upload Photos:</label>
+            <label className="label-upload">Click to Upload Photos:</label>
             <div className="container">
-                <a className="buttoncustom tick"
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    size="large"
+                    startIcon={<PhotoCamera />}
                     onDragOver={dragOver}
                     onDragEnter={dragEnter}
                     onDragLeave={dragLeave}
                     onDrop={fileDrop}
                     onClick={fileInputClicked}>
-                    <input
-                        ref={fileInputRef}
-                        className="file-input"
-                        type="file"
-                        multiple
-                        onChange={filesSelected}
-                    />
-                </a> 
+                <input
+                    ref={fileInputRef}
+                    className="file-input"
+                    type="file"
+                    multiple
+                    onChange={filesSelected}
+                />
+                    Upload
+                </Button> 
             </div>
             <span className='file-error-message'>{errorMessage}</span>
             <div className="file-display-container">

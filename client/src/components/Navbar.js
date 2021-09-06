@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment } from 'react'
-import Button1 from './Button1'
+import { itemTotal } from "../system/cartHelpers";
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 import { signout, isAuthenticated } from "../auth";
 import { Link, withRouter } from 'react-router-dom'
@@ -8,59 +8,46 @@ import {AiOutlineMenu} from 'react-icons/ai'
 import {FiHome} from 'react-icons/fi'
 import {RiAccountCircleLine, RiShoppingBagLine, RiArticleLine, RiShoppingCart2Line } from 'react-icons/ri'
 import {GiLotus} from 'react-icons/gi'
+import Divider from '@material-ui/core/Divider';
+
 import '../App.css';
 
 import './css/Navbar.css'
 
 const isActive = (history, path) => {
-    if (history.location.pathname === path) {
-        return { color: "#ff9900" };
-    } else {
-        return { color: "#ffffff" };
-    }
-};
+    if (history.location.pathname === path) return { color: "#ff9900" };
+    else return { color: "#ffffff" };
+}
 
 const Navbar = ({ history }) => {
     const [click, setClick] = useState(false)
-    const [button, setButton] = useState(true)
     const [header, setHeader] = useState("header")
     
     const handleClick = () => {
         setClick(!click)
-        document.body.classList.add('scrollblock');
+        if (!click) document.body.classList.add('scrollblock');
+        else document.body.classList.remove('scrollblock');
     }
+
     const closeMobileMenu = () => {
         setClick(false)
         document.body.classList.remove('scrollblock');
     } 
   
-    const showButton = () => {
-        if(window.innerWidth <= 960) {
-            setButton(false)
-        }
-        else {
-            setButton(true)
-        }
-    }
-
-    useEffect(() => {
-        showButton();
-    }, []);
-  
     const listenScrollEvent = e => {
-        if (window.scrollY < 200) {
-            return setHeader("mynavbar")
-        } else {
-            return setHeader("mynavbar1")
-        } 
+       
+            if (window.scrollY < 200) {return setHeader("mynavbar");}
+            else return setHeader("mynavbar1");
+        
+        
     }
 
     useEffect(() => {
         setHeader("mynavbar")
-        window.addEventListener('scroll', listenScrollEvent);
+        if (window.screen.width > 900) {
+            window.addEventListener('scroll', listenScrollEvent);
+        }
       }, []);
-      
-    window.addEventListener('resize', showButton)
 
     const popover = (
         <Popover className="pop-container" id="popover-basic" >
@@ -113,25 +100,32 @@ const Navbar = ({ history }) => {
         <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
             <div className='nav-links' style={{cursor:'pointer'}}>
                 <RiAccountCircleLine className='fa-typo3'/>
-                    
             </div>
         </OverlayTrigger>  
     );
 
     const MobileMenu = () => {
         return (
-            <div className="mnavbar-container" >
-                <ul className={click ? 'mnav-menu active' : 'mnav-menu'}>
-                        <li className='mnav-item'>
-                            <Link to='/signin' className='mnav-links'  onClick={closeMobileMenu}>
-                            <RiAccountCircleLine className='fa-typo4'/>
-                            </Link>
-                        </li>
-                        <li className='mnav-item'>
-                            <Link to='/cart' className='mnav-links'  onClick={closeMobileMenu}>
-                                <RiShoppingCart2Line className='fa-typo4'/>
-                            </Link>
-                        </li>
+            <div>
+                <Fragment>
+                <div className={click ? 'mnav-menu active' : 'mnav-menu'}>
+                <ul >
+                    <li className='mnav-item'>
+                        <Link to='/signin' className='mnav-links'  onClick={closeMobileMenu}>
+                        <RiAccountCircleLine className='fa-typo4'/>
+                        </Link>
+                    </li>
+                    <li className='mnav-item'>
+                        <Link to='/cart' className='mnav-links'  onClick={closeMobileMenu}>
+                            <RiShoppingCart2Line className='fa-typo4'/>
+                            <sup>
+                                <small className="cart-badge">{itemTotal()}</small>
+                            </sup>
+                        </Link>
+                    </li>
+            
+                        <div class="hl"></div>
+                 
                     <li className='mnav-item'>
                         <Link to='/' className='mnav-links' style={isActive(history, "/")} onClick={closeMobileMenu}>
                             <FiHome className='fa-typo4'/>
@@ -149,19 +143,21 @@ const Navbar = ({ history }) => {
                             <RiArticleLine className='fa-typo4'/>
                             Articles
                         </Link>
-                    </li>
+                    </li> 
                 </ul>
-            </div> 
+                </div>
+            </Fragment>
+            </div>        
         )
     }
     
     return (
         <>
-            <nav className={header}>
+            <nav className='mynavbar'>
                 <div className="navbar-container" >
                     <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-                    <GiLotus className='fa-typo3' />
-                        Renaissance Gardens   
+                   
+                        servicemarket  
                     </Link>
                     <div className='menu-icon' onClick={handleClick}>
                         {click ? <ImCross color="white"/> : <AiOutlineMenu color="white"/>}
@@ -194,13 +190,17 @@ const Navbar = ({ history }) => {
                         <li className='nav-item'>
                             <Link to='/cart' className='nav-links'  onClick={closeMobileMenu}>
                                 <RiShoppingCart2Line className='fa-typo4'/>
+                                <sup>
+                                    <small className="cart-badge">{itemTotal()}</small>
+                                </sup>
                             </Link>
                         </li>
                     </ul>
-                   
+                    
                 </div>
+                <MobileMenu/>
             </nav>  
-            <MobileMenu/>
+            
         </>
     )
 }
